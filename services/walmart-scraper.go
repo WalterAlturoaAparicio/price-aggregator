@@ -53,7 +53,7 @@ func SearchWalmart(query string) []models.Product {
 			})
 
 			if len(products) >= maxProducts {
-				c.OnHTMLDetach(".ui-search-layout__item") // Detiene la recolección de más elementos
+				c.OnHTMLDetach("[data-testid='list-view']") // Detiene la recolección de más elementos
 			}
 		}
 	})

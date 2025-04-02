@@ -8,12 +8,13 @@ import (
 // SearchProducts consulta múltiples fuentes en paralelo
 func SearchProducts(query string) []models.Product {
 	var wg sync.WaitGroup
-	results := make(chan models.Product, 30)
+	results := make(chan models.Product, 21)
 
 	sources := []func(string) []models.Product{
 		SearchLinio,
 		SearchWalmart,
 		SearchMercadoLibre,
+		SearchAmazon,
 	}
 
 	// Ejecutar cada búsqueda en paralelo

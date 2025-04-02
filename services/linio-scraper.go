@@ -44,7 +44,7 @@ func SearchLinio(query string) []models.Product {
 				Store: "Linio",
 			})
 			if len(products) >= maxProducts {
-				c.OnHTMLDetach(".ui-search-layout__item") // Detiene la recolección de más elementos
+				c.OnHTMLDetach(".grid-pod") // Detiene la recolección de más elementos
 			}
 		}
 	})
