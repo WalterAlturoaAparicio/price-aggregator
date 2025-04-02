@@ -37,6 +37,14 @@ func SearchAmazon(query string) []models.Product {
 		Delay:       500 * time.Millisecond, // Reducimos el delay para mayor velocidad
 	})
 
+	c.OnResponse(func(r *colly.Response) {
+		log.Println("Código de respuesta:", r.StatusCode)
+		if r.StatusCode == 503 {
+			log.Println("Amazon está bloqueando la solicitud. Intenta con un proxy o espera.")
+			return
+		}
+	})
+
 	// Extraer información de cada producto
 	c.OnHTML("[data-component-type='s-search-result']", func(e *colly.HTMLElement) {
 		if len(products) >= maxProducts {
@@ -74,14 +82,6 @@ func SearchAmazon(query string) []models.Product {
 	if err != nil {
 		log.Println("Error al hacer scraping en Amazon:", err)
 	}
-
-	c.OnResponse(func(r *colly.Response) {
-		log.Println("Código de respuesta:", r.StatusCode)
-		if r.StatusCode == 503 {
-			log.Println("Amazon está bloqueando la solicitud. Intenta con un proxy o espera.")
-			return
-		}
-	})
 
 	return products
 }

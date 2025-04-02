@@ -26,6 +26,12 @@ func SearchLinio(query string) []models.Product {
 		r.Headers.Set("Referer", "https://www.google.com/")
 		log.Println("Enviando petición a:", r.URL)
 	})
+	c.OnResponse(func(r *colly.Response) {
+		log.Println("Código de respuesta:", r.StatusCode)
+		if r.StatusCode != 200 {
+			log.Println("La página puede estar bloqueando el scraper o no existe.")
+		}
+	})
 
 	c.OnHTML(".grid-pod", func(e *colly.HTMLElement) {
 		if len(products) >= maxProducts {
@@ -56,15 +62,6 @@ func SearchLinio(query string) []models.Product {
 	if err != nil {
 		log.Println("Error al hacer scraping en Linio:", err)
 	}
-
-	c.OnResponse(func(r *colly.Response) {
-		log.Println("Código de respuesta:", r.StatusCode)
-		if r.StatusCode != 200 {
-			log.Println("La página puede estar bloqueando el scraper o no existe.")
-		}
-		log.Println("Contenido HTML recibido:")
-		log.Println(string(r.Body)) // Esto imprimirá el HTML recibido
-	})
 
 	return products
 }

@@ -21,6 +21,12 @@ func SearchMercadoLibre(query string) []models.Product {
 		r.Headers.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
 		log.Println("Enviando petición a:", r.URL)
 	})
+	c.OnResponse(func(r *colly.Response) {
+		log.Println("Código de respuesta:", r.StatusCode)
+		if r.StatusCode != 200 {
+			log.Println("La página puede estar bloqueando el scraper o no existe.")
+		}
+	})
 	c.Limit(&colly.LimitRule{
 		DomainGlob:  "*mercadolibre.*",
 		Parallelism: 2,
@@ -65,15 +71,6 @@ func SearchMercadoLibre(query string) []models.Product {
 	if err != nil {
 		log.Println("Error al hacer scraping en Mercado Libre:", err)
 	}
-
-	c.OnResponse(func(r *colly.Response) {
-		log.Println("Código de respuesta:", r.StatusCode)
-		if r.StatusCode != 200 {
-			log.Println("La página puede estar bloqueando el scraper o no existe.")
-		}
-		log.Println("Contenido HTML recibido:")
-		log.Println(string(r.Body)) // Esto imprimirá el HTML recibido
-	})
 
 	return products
 }
