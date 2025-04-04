@@ -34,6 +34,8 @@ func SearchWalmart(query string) []models.Product {
 
 	c.OnRequest(func(r *colly.Request) {
 		r.Headers.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+		r.Headers.Set("Referer", "https://www.google.com/")
+		r.Headers.Set("Accept-Language", "en-US,en;q=0.9")
 		log.Println("Enviando petición a:", r.URL)
 	})
 
